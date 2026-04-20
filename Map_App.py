@@ -9,7 +9,7 @@ st.set_page_config(page_title="Italy Demographic Map", layout="wide")
 # -----------------------------
 # SETTINGS
 # -----------------------------
-DATA_PATH = "/Users/zhina/FaceBook Project Bocconi/IT_Test.csv"
+DATA_PATH = "IT_Test.csv"
 MAP_FEATURE_NAME_PATH = "properties.reg_name"
 
 # -----------------------------
