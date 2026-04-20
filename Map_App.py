@@ -109,6 +109,9 @@ def build_map(filtered_df, geojson, metric):
         .sum()
     )
 
+    # Keep NaN values (important!)
+    # Do NOT fill them
+
     fig = px.choropleth(
         region_df,
         geojson=geojson,
@@ -124,12 +127,31 @@ def build_map(filtered_df, geojson, metric):
         color_continuous_scale="Reds",
     )
 
+    # 👇 THIS LINE FIXES THE ISSUE
+    fig.update_traces(
+        marker_line_color="white",
+        marker_line_width=0.5,
+        selector=dict(type="choropleth"),
+    )
+
+    # 👇 Make missing values white
+    fig.update_layout(
+        coloraxis_colorbar=dict(title=metric),
+    )
+
+    # VERY IMPORTANT: remove NaNs from coloring
+    fig.data[0].z = [
+        val if pd.notna(val) else None
+        for val in region_df[metric]
+    ]
+
     fig.update_geos(fitbounds="locations", visible=False)
     fig.update_layout(
         title="Estimated Audience by Region",
         margin=dict(l=0, r=0, t=60, b=0),
         height=700,
     )
+
     return fig, region_df
 
 
